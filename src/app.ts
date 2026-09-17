@@ -100,6 +100,9 @@ export function createApp(config: AppConfig, dependencies: AppDependencies = {})
   const now = dependencies.now ?? (() => new Date());
 
   app.disable("x-powered-by");
+  // Vercel and Render terminate TLS at their reverse proxy. Trust the nearest
+  // proxy so x402 challenges advertise the public https resource URL.
+  app.set("trust proxy", 1);
   app.use(express.json({ limit: "32kb" }));
 
   app.get("/healthz", (_req, res) => {
