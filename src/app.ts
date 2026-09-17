@@ -1,3 +1,8 @@
+/*
+ * x402 server registration follows the Apache-2.0-licensed Kite TypeScript
+ * template. QuakePay routing, validation, USGS integration, and responses are
+ * project-specific modifications.
+ */
 import express, {
   type NextFunction,
   type Request,

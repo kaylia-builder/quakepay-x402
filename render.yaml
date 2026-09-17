@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: quakepay-x402
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: PAY_TO
+        value: 0x1617Ae836b163d055DFa0655D9100f35864953f0
+      - key: KITE_NETWORK
+        value: testnet
+      - key: PRICE_USD
+        value: "0.001"
+      - key: FACILITATOR_URL
+        value: https://facilitator.pieverse.io/v2
+      - key: UPSTREAM_URL
+        value: https://earthquake.usgs.gov/fdsnws/event/1/
+      - key: UPSTREAM_TIMEOUT_MS
+        value: "8000"
+      - key: SERVICE_DESCRIPTION
+        value: Agent-ready earthquake intelligence from the USGS catalog

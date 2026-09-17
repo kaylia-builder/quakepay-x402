@@ -97,6 +97,18 @@ docker build -t quakepay-x402 .
 docker run --rm -p 8080:8080 --env-file .env quakepay-x402
 ```
 
+For Render, this repository includes a [`render.yaml`](render.yaml) Blueprint.
+Connect the repository as a Blueprint and Render will build the Dockerfile,
+check `/healthz`, and inject the non-secret testnet service configuration. Free
+instances can sleep after inactivity, so call `/healthz` before collecting paid
+test evidence or select an always-on plan.
+
+After deployment, verify the live health endpoint and all unpaid challenges:
+
+```bash
+BASE_URL=https://your-service.onrender.com npm run verify:deployment
+```
+
 Start on Kite testnet (`eip155:2368`, pieUSD). After deployment:
 
 1. Confirm `pay_to` in `service.yaml` matches the dashboard-connected service wallet.
@@ -113,6 +125,11 @@ Earthquake data is retrieved from the USGS Earthquake Catalog. Review the
 and retain source attribution in derived responses. QuakePay is not affiliated
 with or endorsed by USGS.
 
-## License
+## License and upstream attribution
 
-MIT
+Apache-2.0. The Kite chain configuration and x402 server setup are derived from
+the Apache-2.0-licensed
+[`gokite-ai/kite-x402-services`](https://github.com/gokite-ai/kite-x402-services)
+TypeScript/Express template. See [`NOTICE`](NOTICE) for details. QuakePay's USGS
+query, normalization, risk-screening, validation, testing, deployment, and
+evidence code are original additions in this repository.
