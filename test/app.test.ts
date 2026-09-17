@@ -59,6 +59,22 @@ describe("QuakePay HTTP API", () => {
     expect(typeof handleRequest).toBe("function");
   });
 
+  it("publishes a public service index", async () => {
+    const app = createApp(config, { paymentGuard: paymentGuard([]) });
+    const response = await request(app).get("/");
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({
+      ok: true,
+      service: "quakepay-x402",
+      network: "eip155:2368",
+      paidEndpoints: [
+        "/v1/earthquakes/recent",
+        "/v1/earthquakes/nearby",
+        "/v1/earthquakes/{eventId}/risk"
+      ]
+    });
+  });
+
   it("keeps health checks public", async () => {
     const app = createApp(config, { paymentGuard: paymentGuard([]), usgsClient: async () => ({ type: "FeatureCollection", features: [] }) });
     const response = await request(app).get("/healthz");

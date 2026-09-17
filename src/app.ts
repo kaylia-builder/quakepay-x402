@@ -105,6 +105,23 @@ export function createApp(config: AppConfig, dependencies: AppDependencies = {})
   app.set("trust proxy", 1);
   app.use(express.json({ limit: "32kb" }));
 
+  app.get("/", (_req, res) => {
+    res.json({
+      ok: true,
+      service: "quakepay-x402",
+      description: config.serviceDescription,
+      network: config.chain.network,
+      asset: config.chain.assetSymbol,
+      price: config.price,
+      health: "/healthz",
+      paidEndpoints: [
+        "/v1/earthquakes/recent",
+        "/v1/earthquakes/nearby",
+        "/v1/earthquakes/{eventId}/risk"
+      ]
+    });
+  });
+
   app.get("/healthz", (_req, res) => {
     res.json({
       ok: true,
