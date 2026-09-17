@@ -8,9 +8,16 @@ if (!Number.isSafeInteger(port) || port <= 0 || port > 65535) {
 }
 
 const app = createApp(config);
-app.listen(port, () => {
-  console.log(
-    `quakepay-x402 listening on :${port} ` +
-      `(network ${config.chain.network}, ${config.price} per call to ${config.payTo})`
-  );
-});
+
+// Vercel detects and invokes this Express export as one serverless function.
+// Local/container runtimes keep using the ordinary port listener.
+export default app;
+
+if (!process.env.VERCEL) {
+  app.listen(port, () => {
+    console.log(
+      `quakepay-x402 listening on :${port} ` +
+        `(network ${config.chain.network}, ${config.price} per call to ${config.payTo})`
+    );
+  });
+}

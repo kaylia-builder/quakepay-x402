@@ -97,11 +97,15 @@ docker build -t quakepay-x402 .
 docker run --rm -p 8080:8080 --env-file .env quakepay-x402
 ```
 
-For Render, this repository includes a [`render.yaml`](render.yaml) Blueprint.
-Connect the repository as a Blueprint and Render will build the Dockerfile,
-check `/healthz`, and inject the non-secret testnet service configuration. Free
-instances can sleep after inactivity, so call `/healthz` before collecting paid
-test evidence or select an always-on plan.
+The simplest deployment path is **Vercel Hobby**. Import this GitHub repository
+as a new Vercel project and click Deploy. [`vercel.json`](vercel.json) contains
+the non-secret testnet service configuration, and `src/server.ts` exports the
+Express app as one serverless function. No payment card, private key, or custom
+build settings are required.
+
+The repository also retains a [`render.yaml`](render.yaml) Blueprint as an
+alternative for an always-running container host. Some Render accounts require
+credit-card verification even for free services.
 
 After deployment, verify the live health endpoint and all unpaid challenges:
 

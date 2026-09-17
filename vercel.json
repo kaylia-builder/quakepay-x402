@@ -1,0 +1,18 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "fluid": true,
+  "functions": {
+    "src/server.ts": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "PAY_TO": "0x1617Ae836b163d055DFa0655D9100f35864953f0",
+    "KITE_NETWORK": "testnet",
+    "PRICE_USD": "0.001",
+    "FACILITATOR_URL": "https://facilitator.pieverse.io/v2",
+    "UPSTREAM_URL": "https://earthquake.usgs.gov/fdsnws/event/1/",
+    "UPSTREAM_TIMEOUT_MS": "8000",
+    "SERVICE_DESCRIPTION": "Agent-ready earthquake intelligence from the USGS catalog"
+  }
+}
