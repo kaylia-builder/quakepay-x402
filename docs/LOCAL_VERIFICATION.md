@@ -1,6 +1,6 @@
 # Local pre-deployment verification
 
-Verified on 2026-09-17 before configuring the maintainer's receiver address.
+Verified on 2026-09-17 locally and against the public Vercel deployment.
 
 ## Production middleware smoke test
 
@@ -40,11 +40,19 @@ the official catalog using a 24-hour, magnitude 4.5, limit 3 query.
 
 ```text
 TypeScript typecheck: passed
-Tests: 9 passed
+Tests: 10 passed
 Manifest schema validation: passed
 Production build: passed
 npm audit: 0 vulnerabilities
 ```
 
-Paid 2xx calls and settlement evidence remain pending until a public receiver
-address and HTTPS deployment are configured.
+## Public testnet deployment
+
+- Base URL: https://quakepay-x402.vercel.app
+- Health check: HTTP 200
+- All three paid routes: HTTP 402 without payment
+- Challenge version/network: x402 v2 / `eip155:2368`
+- Challenge receiver: `0x1617Ae836b163d055DFa0655D9100f35864953f0`
+- Challenge resource URL: HTTPS
+
+Paid 2xx calls and settlement evidence remain pending.

@@ -6,23 +6,23 @@ keys, seed phrases, login codes, bearer tokens, or complete payment signatures.
 ## Identity and revision
 
 - Repository: https://github.com/kaylia-builder/quakepay-x402
-- Commit SHA: `PENDING`
+- Contribution commit SHA: `3438e4a92934910317ce188b26aac5f0d648880c`
 - Maintainer: `kaylia-builder`
 - Contribution direction: `x402-service`
 
 ## Deployment
 
-- Public HTTPS base URL: `PENDING`
+- Public HTTPS base URL: https://quakepay-x402.vercel.app
 - Network: `eip155:2368` (Kite testnet)
 - Receiver address: `0x1617Ae836b163d055DFa0655D9100f35864953f0`
 - Price: `$0.001` per request
-- Health check: `PENDING/healthz`
+- Health check: https://quakepay-x402.vercel.app/healthz (HTTP 200)
 
 ## Automated verification
 
-- CI run: `PENDING`
-- `npm run check` output: `PENDING`
-- Manifest validation: `PENDING`
+- CI runs: https://github.com/kaylia-builder/quakepay-x402/actions
+- `npm run check`: passed (10 tests)
+- Manifest validation: passed against the official Kite x402 schema
 
 ## Unpaid request evidence
 
@@ -30,7 +30,17 @@ Record the timestamp, request URL, HTTP 402 status, and decoded
 `PAYMENT-REQUIRED` challenge. Redact the payment signature if one is present.
 
 ```text
-PENDING
+Verified: 2026-09-17T12:29:15.547Z
+GET /v1/earthquakes/recent: HTTP 402
+GET /v1/earthquakes/nearby: HTTP 402
+GET /v1/earthquakes/{eventId}/risk: HTTP 402
+x402Version: 2
+scheme: exact
+network: eip155:2368
+amount: 1000000000000000
+asset: 0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A (pieUSD)
+payTo: 0x1617Ae836b163d055DFa0655D9100f35864953f0
+resource URL protocol: HTTPS
 ```
 
 ## Paid 2xx examples
