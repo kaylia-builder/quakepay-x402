@@ -12,6 +12,11 @@ import express, {
 import { paymentMiddleware, x402ResourceServer } from "@x402/express";
 import { ExactEvmScheme } from "@x402/evm/exact/server";
 import { HTTPFacilitatorClient } from "@x402/core/server";
+import type { RoutesConfig } from "@x402/core/http";
+import {
+  bazaarResourceServerExtension,
+  declareDiscoveryExtension
+} from "@x402/extensions/bazaar";
 import { loadConfig, type AppConfig } from "./config.js";
 import { assessRisk, normalizeFeature } from "./earthquakes.js";
 import { kiteMoneyParser } from "./kite.js";
@@ -33,28 +38,123 @@ class RequestError extends Error {
   }
 }
 
+const serviceTags = ["earthquake", "usgs", "risk", "kite-ai", "live-data"];
+
+function paidRoute(
+  config: AppConfig,
+  description: string,
+  extensions: Record<string, unknown>
+) {
+  return {
+    accepts: {
+      scheme: "exact" as const,
+      price: config.price,
+      network: config.chain.network,
+      payTo: config.payTo,
+      maxTimeoutSeconds: 60
+    },
+    description,
+    mimeType: "application/json",
+    serviceName: "quakepay-x402",
+    tags: serviceTags,
+    extensions
+  };
+}
+
+/**
+ * Describe every paid route with x402 Bazaar metadata so Kite-compatible
+ * facilitators and agents can discover how to call the service from its 402.
+ */
+export function createPaymentRoutes(config: AppConfig): RoutesConfig {
+  return {
+    "GET /v1/earthquakes/recent": paidRoute(
+      config,
+      "Return recent earthquakes above a configurable magnitude.",
+      declareDiscoveryExtension({
+        input: { hours: 24, minMagnitude: 4.5, limit: 20 },
+        inputSchema: {
+          properties: {
+            hours: { type: "integer", minimum: 1, maximum: 168 },
+            minMagnitude: { type: "number", minimum: 0, maximum: 10 },
+            limit: { type: "integer", minimum: 1, maximum: 100 }
+          },
+          additionalProperties: false
+        },
+        output: {
+          example: {
+            query: { hours: 24, minMagnitude: 4.5, limit: 20 },
+            count: 1,
+            source: "USGS Earthquake Catalog",
+            earthquakes: [{ id: "us7000example", magnitude: 5.2, place: "Example Region" }]
+          }
+        }
+      })
+    ),
+    "GET /v1/earthquakes/nearby": paidRoute(
+      config,
+      "Return earthquakes near a latitude and longitude.",
+      declareDiscoveryExtension({
+        input: {
+          latitude: 35.6762,
+          longitude: 139.6503,
+          radiusKm: 250,
+          hours: 168,
+          minMagnitude: 2.5,
+          limit: 20
+        },
+        inputSchema: {
+          properties: {
+            latitude: { type: "number", minimum: -90, maximum: 90 },
+            longitude: { type: "number", minimum: -180, maximum: 180 },
+            radiusKm: { type: "number", minimum: 1, maximum: 2000 },
+            hours: { type: "integer", minimum: 1, maximum: 720 },
+            minMagnitude: { type: "number", minimum: 0, maximum: 10 },
+            limit: { type: "integer", minimum: 1, maximum: 100 }
+          },
+          required: ["latitude", "longitude"],
+          additionalProperties: false
+        },
+        output: {
+          example: {
+            query: { latitude: 35.6762, longitude: 139.6503, radiusKm: 250 },
+            count: 1,
+            source: "USGS Earthquake Catalog",
+            earthquakes: [{ id: "us7000example", magnitude: 4.8, place: "Near Tokyo" }]
+          }
+        }
+      })
+    ),
+    "GET /v1/earthquakes/:eventId/risk": paidRoute(
+      config,
+      "Normalize one USGS event and produce a deterministic risk screening.",
+      declareDiscoveryExtension({
+        pathParams: { eventId: "us7000example" },
+        pathParamsSchema: {
+          properties: {
+            eventId: { type: "string", pattern: "^[A-Za-z0-9_-]{3,40}$" }
+          },
+          required: ["eventId"],
+          additionalProperties: false
+        },
+        output: {
+          example: {
+            source: "USGS Earthquake Catalog",
+            earthquake: { id: "us7000example", magnitude: 6.2 },
+            risk: { score: 78, level: "high", factors: ["Strong magnitude"] }
+          }
+        }
+      })
+    )
+  };
+}
+
 function createPaymentGuard(config: AppConfig): RequestHandler {
   const facilitator = new HTTPFacilitatorClient({ url: config.facilitatorUrl });
   const resourceServer = new x402ResourceServer(facilitator).register(
     config.chain.network,
     new ExactEvmScheme().registerMoneyParser(kiteMoneyParser(config.chain))
-  );
-  return paymentMiddleware(
-    {
-      "/v1/*": {
-        accepts: {
-          scheme: "exact",
-          price: config.price,
-          network: config.chain.network,
-          payTo: config.payTo,
-          maxTimeoutSeconds: 60
-        },
-        description: config.serviceDescription,
-        mimeType: "application/json"
-      }
-    },
-    resourceServer
-  );
+  ).registerExtension(bazaarResourceServerExtension);
+  return paymentMiddleware(createPaymentRoutes(config), resourceServer);
 }
 
 function scalar(value: unknown, name: string): string | undefined {
@@ -114,6 +214,7 @@ export function createApp(config: AppConfig, dependencies: AppDependencies = {})
       asset: config.chain.assetSymbol,
       price: config.price,
       health: "/healthz",
+      discovery: "x402 Bazaar metadata is included in each 402 challenge",
       paidEndpoints: [
         "/v1/earthquakes/recent",
         "/v1/earthquakes/nearby",

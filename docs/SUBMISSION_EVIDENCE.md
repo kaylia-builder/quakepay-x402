@@ -21,8 +21,10 @@ keys, seed phrases, login codes, bearer tokens, or complete payment signatures.
 ## Automated verification
 
 - CI runs: https://github.com/kaylia-builder/quakepay-x402/actions
-- `npm run check`: passed (10 tests)
+- `npm run check`: passed (12 tests)
 - Manifest validation: passed against the official Kite x402 schema
+- All paid routes advertise valid x402 Bazaar discovery metadata with request
+  schemas, response examples, service identity, and Kite capability tags.
 
 ## Unpaid request evidence
 
@@ -83,3 +85,4 @@ PENDING
 - Deterministic event risk screen.
 - Input bounds, upstream timeout, normalized responses, tests, CI, container,
   schema-validated manifest, and submission checklist.
+- Standard x402 Bazaar discovery metadata for all three paid Kite endpoints.

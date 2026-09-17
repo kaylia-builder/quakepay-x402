@@ -1,7 +1,8 @@
 import type { RequestHandler } from "express";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
-import handleRequest, { createApp } from "../src/app.js";
+import { validateDiscoveryExtensionSpec } from "@x402/extensions/bazaar";
+import handleRequest, { createApp, createPaymentRoutes } from "../src/app.js";
 import type { AppConfig } from "../src/config.js";
 import { KITE_TESTNET } from "../src/kite.js";
 import { UpstreamError, type UsgsClient } from "../src/usgs.js";
@@ -67,12 +68,34 @@ describe("QuakePay HTTP API", () => {
       ok: true,
       service: "quakepay-x402",
       network: "eip155:2368",
+      discovery: "x402 Bazaar metadata is included in each 402 challenge",
       paidEndpoints: [
         "/v1/earthquakes/recent",
         "/v1/earthquakes/nearby",
         "/v1/earthquakes/{eventId}/risk"
       ]
     });
+  });
+
+  it("publishes valid Bazaar discovery metadata for every paid route", () => {
+    const routes = createPaymentRoutes(config) as Record<
+      string,
+      { serviceName?: string; tags?: string[]; extensions?: Record<string, unknown> }
+    >;
+
+    expect(Object.keys(routes)).toEqual([
+      "GET /v1/earthquakes/recent",
+      "GET /v1/earthquakes/nearby",
+      "GET /v1/earthquakes/:eventId/risk"
+    ]);
+
+    for (const route of Object.values(routes)) {
+      expect(route.serviceName).toBe("quakepay-x402");
+      expect(route.tags).toContain("kite-ai");
+      const bazaar = route.extensions?.bazaar;
+      expect(bazaar).toBeDefined();
+      expect(validateDiscoveryExtensionSpec(bazaar as Record<string, unknown>)).toEqual({ valid: true });
+    }
   });
 
   it("keeps health checks public", async () => {

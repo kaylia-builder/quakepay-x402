@@ -12,6 +12,15 @@ The service adds value beyond a raw proxy by validating query bounds,
 normalizing GeoJSON into a stable response shape, and calculating a transparent,
 deterministic risk screen from magnitude, depth, tsunami, and PAGER indicators.
 
+## KiteAI integration
+
+- Settles x402 `exact` payments on Kite testnet (`eip155:2368`) with pieUSD.
+- Uses the Pieverse facilitator recommended by the Kite reference service.
+- Enforces the Kite review lifecycle: verify first, call USGS second, and settle
+  only after a successful upstream response.
+- Publishes x402 Bazaar request schemas and response examples so Kite-compatible
+  agents and facilitators can discover every paid endpoint from its `402` challenge.
+
 > Risk scores are informational screening only. Always follow official
 > emergency-management guidance.
 
@@ -34,17 +43,23 @@ curl -i "http://localhost:8080/v1/earthquakes/recent?hours=24&minMagnitude=4.5&l
 
 It must return `HTTP/1.1 402 Payment Required` and a `PAYMENT-REQUIRED` header.
 
+Each challenge also includes the standard x402 **Bazaar discovery extension**:
+machine-readable query/path schemas, example responses, the `quakepay-x402`
+service name, and Kite-oriented capability tags. This lets compatible Kite
+agents and facilitators understand how to call all three endpoints directly
+from the unpaid `402` response.
+
 Example paid requests after deployment:
 
 ```bash
-kpass agent session execute --method GET \
+kpass agent:session execute --method GET \
   --url "$BASE_URL/v1/earthquakes/recent?hours=24&minMagnitude=4.5&limit=20"
 
-kpass agent session execute --method GET \
+kpass agent:session execute --method GET \
   --url "$BASE_URL/v1/earthquakes/nearby?latitude=35.6762&longitude=139.6503&radiusKm=250&hours=168"
 
 # Use an id returned by either list endpoint.
-kpass agent session execute --method GET \
+kpass agent:session execute --method GET \
   --url "$BASE_URL/v1/earthquakes/us7000example/risk"
 ```
 
@@ -70,7 +85,8 @@ npm run check
 npm run build
 ```
 
-The automated suite verifies unpaid 402 behavior, successful
+The automated suite verifies unpaid 402 behavior, valid Bazaar discovery
+metadata for every paid route, successful
 `verify → upstream → settle` ordering, no settlement after upstream failure,
 input validation, normalization, risk scoring, Kite asset amounts, and manifest
 schema compatibility.
