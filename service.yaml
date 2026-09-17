@@ -8,7 +8,7 @@ maintainer:
   github: kaylia-builder
 status: draft
 network: eip155:2368
-pay_to: "0x0000000000000000000000000000000000000000"
+pay_to: "0x1617Ae836b163d055DFa0655D9100f35864953f0"
 upstream:
   name: USGS Earthquake Catalog
   url: https://earthquake.usgs.gov/fdsnws/event/1/

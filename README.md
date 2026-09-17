@@ -99,7 +99,7 @@ docker run --rm -p 8080:8080 --env-file .env quakepay-x402
 
 Start on Kite testnet (`eip155:2368`, pieUSD). After deployment:
 
-1. Replace the placeholder `pay_to` in `service.yaml`.
+1. Confirm `pay_to` in `service.yaml` matches the dashboard-connected service wallet.
 2. Add the HTTPS `base_url` and set `status: testnet`.
 3. Confirm every example returns 2xx after payment.
 4. Save the 402 response, paid response, transaction hash, CI link, and schema

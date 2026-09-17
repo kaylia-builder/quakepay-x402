@@ -14,7 +14,7 @@ keys, seed phrases, login codes, bearer tokens, or complete payment signatures.
 
 - Public HTTPS base URL: `PENDING`
 - Network: `eip155:2368` (Kite testnet)
-- Receiver address: `PENDING_PUBLIC_ADDRESS`
+- Receiver address: `0x1617Ae836b163d055DFa0655D9100f35864953f0`
 - Price: `$0.001` per request
 - Health check: `PENDING/healthz`
 

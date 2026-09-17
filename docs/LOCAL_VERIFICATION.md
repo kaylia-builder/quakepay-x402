@@ -22,14 +22,14 @@ The decoded challenge contained:
   "network": "eip155:2368",
   "amount": "1000000000000000",
   "asset": "0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A",
+  "payTo": "0x1617Ae836b163d055DFa0655D9100f35864953f0",
   "maxTimeoutSeconds": 60,
   "extra": { "name": "pieUSD", "version": "1" }
 }
 ```
 
-The receiver used for this local smoke test was a non-secret placeholder. It
-must be replaced with the maintainer's public EVM receiver address before
-deployment.
+The receiver was confirmed against the maintainer's dashboard-connected public
+EVM address. No private key is stored or required by the service.
 
 ## Real upstream smoke test
 
