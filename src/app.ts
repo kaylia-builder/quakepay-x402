@@ -12,7 +12,7 @@ import express, {
 import { paymentMiddleware, x402ResourceServer } from "@x402/express";
 import { ExactEvmScheme } from "@x402/evm/exact/server";
 import { HTTPFacilitatorClient } from "@x402/core/server";
-import type { AppConfig } from "./config.js";
+import { loadConfig, type AppConfig } from "./config.js";
 import { assessRisk, normalizeFeature } from "./earthquakes.js";
 import { kiteMoneyParser } from "./kite.js";
 import { createUsgsClient, UpstreamError, type UsgsClient } from "./usgs.js";
@@ -201,4 +201,13 @@ export function createApp(config: AppConfig, dependencies: AppDependencies = {})
   });
 
   return app;
+}
+
+// Vercel recognizes src/app.ts as an Express entry point. Keep initialization
+// lazy so importing createApp in tests does not contact the facilitator.
+let runtimeApp: ReturnType<typeof createApp> | undefined;
+
+export default function handleRequest(req: Request, res: Response): void {
+  runtimeApp ??= createApp(loadConfig());
+  runtimeApp(req, res);
 }

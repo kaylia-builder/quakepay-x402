@@ -1,7 +1,7 @@
 import type { RequestHandler } from "express";
 import request from "supertest";
 import { describe, expect, it } from "vitest";
-import { createApp } from "../src/app.js";
+import handleRequest, { createApp } from "../src/app.js";
 import type { AppConfig } from "../src/config.js";
 import { KITE_TESTNET } from "../src/kite.js";
 import { UpstreamError, type UsgsClient } from "../src/usgs.js";
@@ -55,6 +55,10 @@ function paymentGuard(events: string[]): RequestHandler {
 }
 
 describe("QuakePay HTTP API", () => {
+  it("exports a Vercel-compatible request handler", () => {
+    expect(typeof handleRequest).toBe("function");
+  });
+
   it("keeps health checks public", async () => {
     const app = createApp(config, { paymentGuard: paymentGuard([]), usgsClient: async () => ({ type: "FeatureCollection", features: [] }) });
     const response = await request(app).get("/healthz");
