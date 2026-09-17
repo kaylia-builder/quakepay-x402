@@ -1,0 +1,47 @@
+import type { UsgsCollection } from "./earthquakes.js";
+
+export class UpstreamError extends Error {
+  constructor(
+    message: string,
+    readonly status?: number
+  ) {
+    super(message);
+    this.name = "UpstreamError";
+  }
+}
+
+export type UsgsQuery = Record<string, string | number>;
+export type UsgsClient = (query: UsgsQuery) => Promise<UsgsCollection>;
+
+export function createUsgsClient(baseUrl: URL, timeoutMs: number): UsgsClient {
+  return async (query) => {
+    const url = new URL("query", baseUrl);
+    url.searchParams.set("format", "geojson");
+    for (const [key, value] of Object.entries(query)) {
+      url.searchParams.set(key, String(value));
+    }
+
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        signal: AbortSignal.timeout(timeoutMs),
+        headers: {
+          accept: "application/geo+json, application/json",
+          "user-agent": "quakepay-x402/0.1 (+https://github.com/kaylia-builder/quakepay-x402)"
+        }
+      });
+    } catch (error) {
+      throw new UpstreamError(`USGS request failed: ${String(error)}`);
+    }
+
+    if (!response.ok) {
+      const detail = (await response.text()).slice(0, 300);
+      throw new UpstreamError(`USGS returned ${response.status}: ${detail}`, response.status);
+    }
+    const data = (await response.json()) as UsgsCollection;
+    if (data.type !== "FeatureCollection" || !Array.isArray(data.features)) {
+      throw new UpstreamError("USGS returned an unexpected response shape");
+    }
+    return data;
+  };
+}

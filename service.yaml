@@ -1,0 +1,52 @@
+schema: 1
+name: quakepay-x402
+display_name: QuakePay
+description: >-
+  Agent-ready recent, nearby, and event-level earthquake intelligence from the
+  USGS catalog, normalized and screened for risk, paid per request over x402.
+maintainer:
+  github: kaylia-builder
+status: draft
+network: eip155:2368
+pay_to: "0x0000000000000000000000000000000000000000"
+upstream:
+  name: USGS Earthquake Catalog
+  url: https://earthquake.usgs.gov/fdsnws/event/1/
+  requires_api_key: false
+  terms_url: https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits
+source: typescript-express
+endpoints:
+  - method: GET
+    path: /v1/earthquakes/recent
+    summary: Return recent earthquakes above a configurable magnitude.
+    price_usd: "0.001"
+    example_request:
+      query:
+        hours: 24
+        minMagnitude: 4.5
+        limit: 20
+    pitfalls:
+      - "hours must be between 1 and 168; limit must be between 1 and 100"
+  - method: GET
+    path: /v1/earthquakes/nearby
+    summary: Return earthquakes near a latitude and longitude.
+    price_usd: "0.001"
+    example_request:
+      query:
+        latitude: 35.6762
+        longitude: 139.6503
+        radiusKm: 250
+        hours: 168
+        minMagnitude: 2.5
+        limit: 20
+    pitfalls:
+      - "latitude and longitude are required; radiusKm must be between 1 and 2000"
+  - method: GET
+    path: /v1/earthquakes/{eventId}/risk
+    summary: Normalize one USGS event and produce a deterministic risk screening.
+    price_usd: "0.001"
+    pitfalls:
+      - "eventId must be a current USGS catalog event identifier"
+      - "risk output is informational and is not emergency-management guidance"
+categories: [data, geo]
+tags: [earthquake, usgs, risk, live-data, agents]

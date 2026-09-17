@@ -1,0 +1,39 @@
+{
+  "name": "quakepay-x402",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Agent-ready earthquake intelligence paid per request with x402 on Kite",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/src/server.js",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run typecheck && npm test && npm run validate:manifest",
+    "validate:manifest": "node scripts/validate-manifest.mjs"
+  },
+  "dependencies": {
+    "@x402/core": "^2.25.0",
+    "@x402/evm": "^2.25.0",
+    "@x402/express": "^2.25.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.0",
+    "@types/supertest": "^6.0.3",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "supertest": "^7.1.4",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^5.0.1",
+    "yaml": "^2.8.1"
+  }
+}
