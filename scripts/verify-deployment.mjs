@@ -1,7 +1,7 @@
 const expected = {
   network: "eip155:2368",
   asset: "0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9".toLowerCase(),
-  amount: "1000000000000000",
+  amount: "10000000000000000",
   payTo: "0x1617Ae836b163d055DFa0655D9100f35864953f0".toLowerCase()
 };
 
@@ -19,7 +19,7 @@ const health = await fetch(new URL("/healthz", baseUrl), {
 });
 if (!health.ok) throw new Error(`/healthz returned ${health.status}`);
 const healthBody = await health.json();
-if (healthBody.network !== expected.network || healthBody.price !== "$0.001") {
+if (healthBody.network !== expected.network || healthBody.price !== "$0.01") {
   throw new Error(`/healthz has unexpected configuration: ${JSON.stringify(healthBody)}`);
 }
 results.push({ path: "/healthz", status: health.status, network: healthBody.network });

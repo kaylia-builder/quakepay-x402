@@ -34,7 +34,7 @@ export function loadConfig(): AppConfig {
     throw new Error("UPSTREAM_URL must use https");
   }
 
-  const priceRaw = env("PRICE_USD", "0.001");
+  const priceRaw = env("PRICE_USD", "0.01");
   if (!/^\d+(\.\d{1,6})?$/.test(priceRaw) || Number(priceRaw) <= 0) {
     throw new Error("PRICE_USD must be a positive decimal with at most 6 fractional digits");
   }

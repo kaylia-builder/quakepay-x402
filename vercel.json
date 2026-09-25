@@ -9,7 +9,7 @@
   "env": {
     "PAY_TO": "0x1617Ae836b163d055DFa0655D9100f35864953f0",
     "KITE_NETWORK": "testnet",
-    "PRICE_USD": "0.001",
+    "PRICE_USD": "0.01",
     "FACILITATOR_URL": "https://facilitator.pieverse.io/v2",
     "UPSTREAM_URL": "https://earthquake.usgs.gov/fdsnws/event/1/",
     "UPSTREAM_TIMEOUT_MS": "8000",

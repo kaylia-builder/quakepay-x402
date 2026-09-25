@@ -11,7 +11,7 @@ import type { UsgsFeature } from "../src/earthquakes.js";
 const config: AppConfig = {
   payTo: "0x1111111111111111111111111111111111111111",
   chain: KITE_TESTNET,
-  price: "$0.001",
+  price: "$0.01",
   facilitatorUrl: "http://facilitator.invalid/v2",
   upstreamUrl: new URL("https://earthquake.usgs.gov/fdsnws/event/1/"),
   upstreamTimeoutMs: 100,
@@ -102,7 +102,7 @@ describe("QuakePay HTTP API", () => {
     const app = createApp(config, { paymentGuard: paymentGuard([]), usgsClient: async () => ({ type: "FeatureCollection", features: [] }) });
     const response = await request(app).get("/healthz");
     expect(response.status).toBe(200);
-    expect(response.body).toMatchObject({ ok: true, network: "eip155:2368", price: "$0.001" });
+    expect(response.body).toMatchObject({ ok: true, network: "eip155:2368", price: "$0.01" });
   });
 
   it("returns 402 before invoking the upstream when no payment is attached", async () => {

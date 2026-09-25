@@ -16,7 +16,7 @@ keys, seed phrases, login codes, bearer tokens, or complete payment signatures.
 - Public HTTPS base URL: https://quakepay-x402.vercel.app
 - Network: `eip155:2368` (Kite testnet)
 - Receiver address: `0x1617Ae836b163d055DFa0655D9100f35864953f0`
-- Price: `$0.001` per request
+- Price: `$0.01` per request
 - Health check: https://quakepay-x402.vercel.app/healthz (HTTP 200)
 
 ## Automated verification
@@ -40,7 +40,7 @@ GET /v1/earthquakes/{eventId}/risk: HTTP 402
 x402Version: 2
 scheme: exact
 network: eip155:2368
-amount: 1000000000000000
+amount: 10000000000000000
 asset: 0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9 (PYUSD)
 payTo: 0x1617Ae836b163d055DFa0655D9100f35864953f0
 resource URL protocol: HTTPS

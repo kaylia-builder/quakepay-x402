@@ -11,7 +11,7 @@ import { privateKeyToAccount } from "viem/accounts";
 
 const KITE_TESTNET = "eip155:2368";
 const PYUSD = "0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9";
-const PRICE_ATOMIC = "1000000000000000";
+const PRICE_ATOMIC = "10000000000000000";
 const DEFAULT_BASE_URL = "https://quakepay-x402.vercel.app";
 
 type Settlement = {
@@ -72,7 +72,7 @@ async function main() {
   const client = new x402Client()
     .register(KITE_TESTNET, new ExactEvmScheme(account))
     .setSpendControls({
-      maxAmountPerPayment: "$0.001",
+      maxAmountPerPayment: "$0.01",
       allowedAssets: [
         {
           network: KITE_TESTNET,

@@ -20,7 +20,7 @@ The decoded challenge contained:
   "x402Version": 2,
   "scheme": "exact",
   "network": "eip155:2368",
-  "amount": "1000000000000000",
+  "amount": "10000000000000000",
   "asset": "0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9",
   "payTo": "0x1617Ae836b163d055DFa0655D9100f35864953f0",
   "maxTimeoutSeconds": 60,
@@ -68,5 +68,5 @@ TESTNET_PAYER_PRIVATE_KEY=0x... npm run testnet:paid-smoke
 
 The client accepts only network `eip155:2368`, asset
 `0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9`, and a maximum atomic amount of
-`1000000000000000` per call. It makes exactly three paid requests and records
+`10000000000000000` per call. It makes exactly three paid requests and records
 their settlement transaction hashes in `testnet-paid-evidence.json`.

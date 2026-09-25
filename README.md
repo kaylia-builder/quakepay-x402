@@ -28,7 +28,7 @@ deterministic risk screen from magnitude, depth, tsunami, and PAGER indicators.
 ## Endpoints
 
 `GET /healthz` is free. Every route under `/v1/` costs the configured
-`PRICE_USD` (default `$0.001`).
+`PRICE_USD` (default `$0.01`, Kite's documented testnet PYUSD transfer minimum).
 
 | Route | Purpose |
 |---|---|
@@ -100,7 +100,7 @@ npm run testnet:paid-smoke
 ```
 
 The client is deliberately restricted to `eip155:2368`, the configured testnet
-PYUSD contract, exactly `$0.001` per payment, and three fixed GET requests. It
+PYUSD contract, exactly `$0.01` per payment, and three fixed GET requests. It
 writes transaction hashes and endpoint evidence to the gitignored
 `testnet-paid-evidence.json`. Set `EVIDENCE_OUT` to choose another output path.
 
@@ -116,7 +116,7 @@ schema compatibility.
 |---|---:|---|---|
 | `PAY_TO` | yes | — | Public EVM address receiving payments |
 | `KITE_NETWORK` | no | `testnet` | `testnet` or `mainnet` |
-| `PRICE_USD` | no | `0.001` | Positive USD decimal, up to 6 decimal places |
+| `PRICE_USD` | no | `0.01` | Positive USD decimal, up to 6 decimal places |
 | `PORT` | no | `8080` | HTTP listen port |
 | `FACILITATOR_URL` | no | `https://facilitator.pieverse.io/v2` | Keep the `/v2` suffix |
 | `UPSTREAM_URL` | no | USGS event API | Fixed HTTPS upstream origin |

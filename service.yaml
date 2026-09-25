@@ -20,7 +20,7 @@ endpoints:
   - method: GET
     path: /v1/earthquakes/recent
     summary: Return recent earthquakes above a configurable magnitude.
-    price_usd: "0.001"
+    price_usd: "0.01"
     example_request:
       query:
         hours: 24
@@ -31,7 +31,7 @@ endpoints:
   - method: GET
     path: /v1/earthquakes/nearby
     summary: Return earthquakes near a latitude and longitude.
-    price_usd: "0.001"
+    price_usd: "0.01"
     example_request:
       query:
         latitude: 35.6762
@@ -45,7 +45,7 @@ endpoints:
   - method: GET
     path: /v1/earthquakes/{eventId}/risk
     summary: Normalize one USGS event and produce a deterministic risk screening.
-    price_usd: "0.001"
+    price_usd: "0.01"
     pitfalls:
       - "eventId must be a current USGS catalog event identifier"
       - "risk output is informational and is not emergency-management guidance"
