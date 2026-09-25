@@ -56,3 +56,17 @@ npm audit: 0 vulnerabilities
 - Challenge resource URL: HTTPS
 
 Paid 2xx calls and settlement evidence remain pending.
+
+## Direct paid-client verification
+
+Passport catalog admission is not required for protocol-level testing. Run the
+repository's restricted direct client with a dedicated Kite testnet wallet:
+
+```bash
+TESTNET_PAYER_PRIVATE_KEY=0x... npm run testnet:paid-smoke
+```
+
+The client accepts only network `eip155:2368`, asset
+`0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A`, and a maximum atomic amount of
+`1000000000000000` per call. It makes exactly three paid requests and records
+their settlement transaction hashes in `testnet-paid-evidence.json`.

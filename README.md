@@ -85,6 +85,22 @@ npm run check
 npm run build
 ```
 
+### Paid Kite testnet smoke test
+
+The repository includes a direct x402 client so end-to-end testnet settlement
+does not depend on a third-party service catalog. Use a dedicated test wallet
+holding only Kite testnet pieUSD; never use a mainnet wallet or commit its key.
+
+```bash
+export TESTNET_PAYER_PRIVATE_KEY=0x...
+npm run testnet:paid-smoke
+```
+
+The client is deliberately restricted to `eip155:2368`, the configured testnet
+pieUSD contract, exactly `$0.001` per payment, and three fixed GET requests. It
+writes transaction hashes and endpoint evidence to the gitignored
+`testnet-paid-evidence.json`. Set `EVIDENCE_OUT` to choose another output path.
+
 The automated suite verifies unpaid 402 behavior, valid Bazaar discovery
 metadata for every paid route, successful
 `verify → upstream → settle` ordering, no settlement after upstream failure,

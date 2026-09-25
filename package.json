@@ -16,15 +16,18 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run typecheck && npm test && npm run validate:manifest",
+    "testnet:paid-smoke": "tsx scripts/testnet-paid-smoke.ts",
     "validate:manifest": "node scripts/validate-manifest.mjs",
     "verify:deployment": "node scripts/verify-deployment.mjs"
   },
   "dependencies": {
     "@x402/core": "^2.25.0",
     "@x402/evm": "^2.25.0",
-    "@x402/extensions": "^2.25.0",
     "@x402/express": "^2.25.0",
-    "express": "^5.1.0"
+    "@x402/extensions": "^2.25.0",
+    "@x402/fetch": "^2.26.0",
+    "express": "^5.1.0",
+    "viem": "^2.56.9"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",

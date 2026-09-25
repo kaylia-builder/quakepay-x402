@@ -6,7 +6,8 @@ keys, seed phrases, login codes, bearer tokens, or complete payment signatures.
 ## Identity and revision
 
 - Repository: https://github.com/kaylia-builder/quakepay-x402
-- Contribution commit SHA: `3438e4a92934910317ce188b26aac5f0d648880c`
+- Contribution commits: use the current weekly commit links submitted to the
+  KiteAI bounty dashboard; this file no longer pins only the initial revision.
 - Maintainer: `kaylia-builder`
 - Contribution direction: `x402-service`
 
@@ -49,6 +50,10 @@ resource URL protocol: HTTPS
 
 Record one successful paid request for every endpoint. Include the response,
 timestamp, and transaction hash or Kite Passport activity identifier.
+
+Run `npm run testnet:paid-smoke` with a dedicated Kite testnet payer. The
+gitignored `testnet-paid-evidence.json` output contains the timestamp, payer,
+endpoint URLs, and settlement transaction hashes needed below.
 
 ### Recent earthquakes
 

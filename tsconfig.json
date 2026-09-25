@@ -11,5 +11,5 @@
     "types": ["node", "vitest/globals"],
     "sourceMap": true
   },
-  "include": ["src", "test", "vitest.config.ts"]
+  "include": ["src", "test", "scripts/**/*.ts", "vitest.config.ts"]
 }

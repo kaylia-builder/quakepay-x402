@@ -5,6 +5,7 @@ coverage/
 .env.*
 !.env.example
 *.log
+testnet-paid-evidence.json
 .DS_Store
 
 .kite-passport/
