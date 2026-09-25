@@ -16,6 +16,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run typecheck && npm test && npm run validate:manifest",
+    "testnet:claim-pyusd": "tsx scripts/claim-testnet-pyusd.ts",
     "testnet:paid-smoke": "tsx scripts/testnet-paid-smoke.ts",
     "validate:manifest": "node scripts/validate-manifest.mjs",
     "verify:deployment": "node scripts/verify-deployment.mjs"

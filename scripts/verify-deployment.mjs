@@ -1,6 +1,6 @@
 const expected = {
   network: "eip155:2368",
-  asset: "0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A".toLowerCase(),
+  asset: "0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9".toLowerCase(),
   amount: "1000000000000000",
   payTo: "0x1617Ae836b163d055DFa0655D9100f35864953f0".toLowerCase()
 };

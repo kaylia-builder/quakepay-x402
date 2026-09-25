@@ -14,7 +14,8 @@ deterministic risk screen from magnitude, depth, tsunami, and PAGER indicators.
 
 ## KiteAI integration
 
-- Settles x402 `exact` payments on Kite testnet (`eip155:2368`) with pieUSD.
+- Settles x402 `exact` payments on Kite testnet (`eip155:2368`) with the
+  self-claimable PYUSD test token documented by Kite.
 - Uses the Pieverse facilitator recommended by the Kite reference service.
 - Enforces the Kite review lifecycle: verify first, call USGS second, and settle
   only after a successful upstream response.
@@ -89,15 +90,17 @@ npm run build
 
 The repository includes a direct x402 client so end-to-end testnet settlement
 does not depend on a third-party service catalog. Use a dedicated test wallet
-holding only Kite testnet pieUSD; never use a mainnet wallet or commit its key.
+holding only Kite testnet KITE and PYUSD; never use a mainnet wallet or commit
+its key. The verified PYUSD contract publicly mints 10 test PYUSD per `claim()`:
 
 ```bash
 export TESTNET_PAYER_PRIVATE_KEY=0x...
+npm run testnet:claim-pyusd
 npm run testnet:paid-smoke
 ```
 
 The client is deliberately restricted to `eip155:2368`, the configured testnet
-pieUSD contract, exactly `$0.001` per payment, and three fixed GET requests. It
+PYUSD contract, exactly `$0.001` per payment, and three fixed GET requests. It
 writes transaction hashes and endpoint evidence to the gitignored
 `testnet-paid-evidence.json`. Set `EVIDENCE_OUT` to choose another output path.
 
@@ -145,7 +148,7 @@ After deployment, verify the live health endpoint and all unpaid challenges:
 BASE_URL=https://your-service.onrender.com npm run verify:deployment
 ```
 
-Start on Kite testnet (`eip155:2368`, pieUSD). After deployment:
+Start on Kite testnet (`eip155:2368`, PYUSD). After deployment:
 
 1. Confirm `pay_to` in `service.yaml` matches the dashboard-connected service wallet.
 2. Add the HTTPS `base_url` and set `status: testnet`.

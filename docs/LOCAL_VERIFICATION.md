@@ -21,10 +21,10 @@ The decoded challenge contained:
   "scheme": "exact",
   "network": "eip155:2368",
   "amount": "1000000000000000",
-  "asset": "0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A",
+  "asset": "0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9",
   "payTo": "0x1617Ae836b163d055DFa0655D9100f35864953f0",
   "maxTimeoutSeconds": 60,
-  "extra": { "name": "pieUSD", "version": "1" }
+  "extra": { "name": "PYUSD", "version": "1" }
 }
 ```
 
@@ -67,6 +67,6 @@ TESTNET_PAYER_PRIVATE_KEY=0x... npm run testnet:paid-smoke
 ```
 
 The client accepts only network `eip155:2368`, asset
-`0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A`, and a maximum atomic amount of
+`0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9`, and a maximum atomic amount of
 `1000000000000000` per call. It makes exactly three paid requests and records
 their settlement transaction hashes in `testnet-paid-evidence.json`.

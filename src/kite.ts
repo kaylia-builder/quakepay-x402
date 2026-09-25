@@ -27,10 +27,10 @@ export const KITE_MAINNET: KiteChain = {
 export const KITE_TESTNET: KiteChain = {
   network: "eip155:2368",
   rpcUrl: "https://rpc-testnet.gokite.ai",
-  assetAddress: "0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A",
-  assetSymbol: "pieUSD",
+  assetAddress: "0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9",
+  assetSymbol: "PYUSD",
   assetDecimals: 18,
-  eip712Name: "pieUSD",
+  eip712Name: "PYUSD",
   eip712Version: "1"
 };
 

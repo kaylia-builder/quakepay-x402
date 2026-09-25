@@ -41,7 +41,7 @@ x402Version: 2
 scheme: exact
 network: eip155:2368
 amount: 1000000000000000
-asset: 0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A (pieUSD)
+asset: 0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9 (PYUSD)
 payTo: 0x1617Ae836b163d055DFa0655D9100f35864953f0
 resource URL protocol: HTTPS
 ```
@@ -91,3 +91,4 @@ PENDING
 - Input bounds, upstream timeout, normalized responses, tests, CI, container,
   schema-validated manifest, and submission checklist.
 - Standard x402 Bazaar discovery metadata for all three paid Kite endpoints.
+- Self-claimable Kite testnet PYUSD flow and direct paid smoke-test client.

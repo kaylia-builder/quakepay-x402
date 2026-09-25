@@ -10,7 +10,7 @@ import { ExactEvmScheme } from "@x402/evm/exact/client";
 import { privateKeyToAccount } from "viem/accounts";
 
 const KITE_TESTNET = "eip155:2368";
-const PIE_USD = "0x38129cf4CE5E183eFF248F42A7D345Bb1B47621A";
+const PYUSD = "0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9";
 const PRICE_ATOMIC = "1000000000000000";
 const DEFAULT_BASE_URL = "https://quakepay-x402.vercel.app";
 
@@ -76,7 +76,7 @@ async function main() {
       allowedAssets: [
         {
           network: KITE_TESTNET,
-          asset: PIE_USD,
+          asset: PYUSD,
           maxAmountPerPayment: PRICE_ATOMIC
         }
       ]
@@ -99,7 +99,7 @@ async function main() {
     verifiedAt: new Date().toISOString(),
     service: origin,
     network: KITE_TESTNET,
-    asset: PIE_USD,
+    asset: PYUSD,
     payer: account.address,
     calls: [
       { endpoint: recentUrl, transaction: recent.settlement.transaction },
