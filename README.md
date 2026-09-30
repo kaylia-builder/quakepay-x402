@@ -102,7 +102,10 @@ npm run testnet:paid-smoke
 The client is deliberately restricted to `eip155:2368`, the configured testnet
 PYUSD contract, exactly `$0.01` per payment, and three fixed GET requests. It
 writes transaction hashes and endpoint evidence to the gitignored
-`testnet-paid-evidence.json`. Set `EVIDENCE_OUT` to choose another output path.
+`testnet-paid-evidence.json`. If a call fails, it still writes the completed
+calls plus the failed endpoint, failure stage, and a safe error code; original
+SDK messages and signed payloads are excluded. Set `EVIDENCE_OUT` to choose
+another output path.
 
 The automated suite verifies unpaid 402 behavior, valid Bazaar discovery
 metadata for every paid route, successful

@@ -54,7 +54,9 @@ finding, not as proof that QuakePay completed a paid request.
 - Passing all read-only checks means only that configuration and advertised
   capabilities align.
 - Only `npm run testnet:paid-smoke` can produce endpoint-level `2xx` responses
-  and settlement transaction hashes after upstream compatibility is fixed.
+  and settlement transaction hashes after upstream compatibility is fixed. A
+  failed run still writes bounded evidence containing the failed endpoint,
+  failure stage, and a safe error code, without copying the original SDK error.
 
 Never publish a payer private key, seed phrase, complete payment signature,
 bearer token, or other wallet credential with a diagnostic report.

@@ -9,6 +9,8 @@ import {
 import { ExactEvmScheme } from "@x402/evm/exact/client";
 import { privateKeyToAccount } from "viem/accounts";
 
+import { classifyPaymentFailure } from "../src/payment-evidence.js";
+
 const KITE_TESTNET = "eip155:2368";
 const PYUSD = "0x8E04D099b1a8Dd20E6caD4b2Ab2B405B98242ec9";
 const PRICE_ATOMIC = "10000000000000000";
@@ -85,32 +87,51 @@ async function main() {
 
   const recentUrl = `${origin}/v1/earthquakes/recent?hours=24&minMagnitude=4.5&limit=3`;
   const nearbyUrl = `${origin}/v1/earthquakes/nearby?latitude=35.6762&longitude=139.6503&radiusKm=250&hours=168&minMagnitude=2.5&limit=3`;
-
-  const recent = await paidJson<EarthquakeList>(paidFetch, recentUrl);
-  const nearby = await paidJson<EarthquakeList>(paidFetch, nearbyUrl);
-  const eventId = recent.body.earthquakes?.[0]?.id ?? nearby.body.earthquakes?.[0]?.id;
-  if (!eventId) {
-    throw new Error("list endpoints returned no event id for the risk request");
-  }
-
-  const riskUrl = `${origin}/v1/earthquakes/${encodeURIComponent(eventId)}/risk`;
-  const risk = await paidJson<Record<string, unknown>>(paidFetch, riskUrl);
-  const evidence = {
-    verifiedAt: new Date().toISOString(),
-    service: origin,
-    network: KITE_TESTNET,
-    asset: PYUSD,
-    payer: account.address,
-    calls: [
-      { endpoint: recentUrl, transaction: recent.settlement.transaction },
-      { endpoint: nearbyUrl, transaction: nearby.settlement.transaction },
-      { endpoint: riskUrl, transaction: risk.settlement.transaction }
-    ]
-  };
-
   const outputPath = resolve(process.env.EVIDENCE_OUT ?? "testnet-paid-evidence.json");
-  await writeFile(outputPath, `${JSON.stringify(evidence, null, 2)}\n`, { mode: 0o600 });
-  console.log(JSON.stringify({ ...evidence, evidenceFile: outputPath }, null, 2));
+  const calls: Array<{ endpoint: string; transaction?: string }> = [];
+  let activeEndpoint = recentUrl;
+
+  try {
+    const recent = await paidJson<EarthquakeList>(paidFetch, recentUrl);
+    calls.push({ endpoint: recentUrl, transaction: recent.settlement.transaction });
+
+    activeEndpoint = nearbyUrl;
+    const nearby = await paidJson<EarthquakeList>(paidFetch, nearbyUrl);
+    calls.push({ endpoint: nearbyUrl, transaction: nearby.settlement.transaction });
+    const eventId = recent.body.earthquakes?.[0]?.id ?? nearby.body.earthquakes?.[0]?.id;
+    if (!eventId) {
+      throw new Error("list endpoints returned no event id for the risk request");
+    }
+
+    activeEndpoint = `${origin}/v1/earthquakes/${encodeURIComponent(eventId)}/risk`;
+    const risk = await paidJson<Record<string, unknown>>(paidFetch, activeEndpoint);
+    calls.push({ endpoint: activeEndpoint, transaction: risk.settlement.transaction });
+    const evidence = {
+      verifiedAt: new Date().toISOString(),
+      status: "success",
+      service: origin,
+      network: KITE_TESTNET,
+      asset: PYUSD,
+      payer: account.address,
+      calls
+    };
+    await writeFile(outputPath, `${JSON.stringify(evidence, null, 2)}\n`, { mode: 0o600 });
+    console.log(JSON.stringify({ ...evidence, evidenceFile: outputPath }, null, 2));
+  } catch (error) {
+    const failure = classifyPaymentFailure(error);
+    const evidence = {
+      verifiedAt: new Date().toISOString(),
+      status: "failed",
+      service: origin,
+      network: KITE_TESTNET,
+      asset: PYUSD,
+      payer: account.address,
+      calls,
+      failure: { endpoint: activeEndpoint, ...failure }
+    };
+    await writeFile(outputPath, `${JSON.stringify(evidence, null, 2)}\n`, { mode: 0o600 });
+    throw new Error(`paid smoke failed during ${failure.stage}: ${failure.reason}`);
+  }
 }
 
 main().catch(error => {
