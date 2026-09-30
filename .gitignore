@@ -6,6 +6,7 @@ coverage/
 !.env.example
 *.log
 testnet-paid-evidence.json
+facilitator-diagnostic.json
 .DS_Store
 
 .kite-passport/

@@ -110,6 +110,21 @@ metadata for every paid route, successful
 input validation, normalization, risk scoring, Kite asset amounts, and manifest
 schema compatibility.
 
+### Read-only facilitator diagnostics
+
+Check the public deployment, its unsigned x402 challenge, and the facilitator's
+advertised capabilities without loading a wallet or signing a payment:
+
+```bash
+npm run diagnose:facilitator
+```
+
+The command writes a gitignored `facilitator-diagnostic.json`. A passing result
+confirms configuration and advertised network support; it deliberately reports
+settlement compatibility as `not_tested`. See
+[`docs/FACILITATOR_COMPATIBILITY.md`](docs/FACILITATOR_COMPATIBILITY.md) for the
+latest result, the known PYUSD settlement limitation, and safe sharing rules.
+
 ## Configuration
 
 | Variable | Required | Default | Description |
